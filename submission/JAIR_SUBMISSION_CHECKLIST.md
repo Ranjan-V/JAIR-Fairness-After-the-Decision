@@ -16,14 +16,18 @@ Prepared: 2026-09-27
   reproducibility audit completed.
 - Color figures were visually inspected; legends and geometric marks carry
   meaning in addition to color.
+- Author-written code is publicly available under the MIT License.
+- The 820 standardized seed-level outputs and other author-generated research
+  artifacts are publicly available under CC BY 4.0.
+- Public repository verified:
+  https://github.com/Ranjan-V/JAIR-Fairness-After-the-Decision
 
 ## Author must complete before upload
 
 - Optionally provide ORCID identifiers; none were supplied or invented.
 - Confirm originality, prior publication, and concurrent-review status.
-- Select a code and generated-artifact license.
-- Designate a permanent artifact repository or remove any promise
-  that code/data accompanies the submission.
+- Archive GitHub release `v1.0.0` with Zenodo and insert the real DOI after it
+  is minted; no DOI has yet been claimed.
 - Arrange an independent human proofread.
 - Confirm acknowledgments, funding, and conflict declarations.
 - Paste the three submission-question answers below into the JAIR system after

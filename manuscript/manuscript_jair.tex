@@ -1,0 +1,581 @@
+\documentclass[manuscript,screen,review]{jair}
+% Submission-stage metadata controls: suppress sample rights/DOI/editor blocks.
+\setcopyright{none}
+\acmDOI{}
+\JAIRAE{}
+\JAIRTrack{}
+\makeatletter
+\def\@mkbibcitation{}
+\let\footnotetextcopyrightpermission\@gobble
+\makeatother
+
+\RequirePackage[
+  datamodel=acmdatamodel,
+  style=acmauthoryear,
+  backend=biber,
+  giveninits=true,
+  uniquename=init
+]{biblatex}
+\addbibresource{references.bib}
+\renewcommand*{\bibopenbracket}{(}
+\renewcommand*{\bibclosebracket}{)}
+
+\usepackage{booktabs,graphicx,microtype}
+\usepackage{xcolor}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\Prb}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\ind}{\mathbf{1}}
+
+\title[Fairness After the Decision]{Fairness After the Decision: Group Fairness Under Selective Human Contestation}
+\author{Ranjan Veerabhadraswamy}
+\affiliation{%
+  \department{School of Computer Science and Engineering}
+  \institution{Vellore Institute of Technology, Andhra Pradesh}
+  \city{Amaravati, Andhra Pradesh 522241}
+  \country{India}}
+\email{ranjanvswamyjnv2005@gmail.com}
+
+\author{Ajith Jubilson Emerson}
+\authornote{Corresponding author.}
+\affiliation{%
+  \department{School of Computer Science and Engineering}
+  \institution{Vellore Institute of Technology, Andhra Pradesh}
+  \city{Amaravati, Andhra Pradesh 522241}
+  \country{India}}
+\email{ajith.jubilson@vitap.ac.in}
+\renewcommand{\shortauthors}{Veerabhadraswamy and Emerson}
+\hypersetup{
+  pdftitle={Fairness After the Decision: Group Fairness Under Selective Human Contestation},
+  pdfauthor={Ranjan Veerabhadraswamy and Ajith Jubilson Emerson},
+  pdfcopyright={},
+  pdflicenseurl={}}
+
+\begin{document}
+
+\begin{abstract}
+{\bf Background:} Group-fairness analyses often stop at an algorithm's initial
+decision even when affected people may enter a selective human review process.
+{\bf Objectives:} We characterize how claimant-initiated contestation changes
+standard group-fairness quantities and what ordinary appeal logs identify.
+{\bf Methods:} A label- and group-specific post-decision operator separates
+appeal access from review quality.  We derive exact preservation and signed-gap
+conditions, analyze heterogeneous-cost access and budgeted assistance, and
+obtain appeal-log-specific sharp bounds.  Synthetic checks and 600 paired
+semisynthetic Adult/German Credit runs evaluate the formal predictions.
+{\bf Results:} Adult supports signed movement and absolute equal-opportunity-gap
+amplification in all 12 unequal-access model--scenario cells.  On German
+Credit, signed movement is resolved in 7 of 12 cells and in none of the four
+random-forest cells; no cell supports broad absolute-gap amplification.
+{\bf Conclusions:} Selective review can create, reinforce, attenuate, cross, or
+reverse disparity.  Empirical validation is partial rather than universal,
+and auditing must cover the initial decision, access, review, and final action.
+\end{abstract}
+
+\maketitle
+\hypersetup{
+  pdfauthor={Ranjan Veerabhadraswamy and Ajith Jubilson Emerson},
+  pdfcopyright={},
+  pdflicenseurl={}}
+
+\section{Introduction}
+
+A denied loan, benefit, job, or service is not always the final institutional
+action.  A person may submit evidence, navigate an appeal process, or obtain
+human review.  Entry into that process is rarely random: time, information,
+documentation, language, legal help, and expected benefit all affect who
+contests.  Consequently, two groups can face the same formal appeal rule but
+different effective opportunities to correct an error.
+
+This observation creates a distinct fairness problem.  Classifier metrics
+describe the initial decision, whereas people experience the final decision
+after review.  A correction channel can improve aggregate accuracy while
+redistributing that improvement unequally.  Conversely, differential review
+can sometimes reduce an existing absolute disparity.  The relevant object is thus not an
+informal ``right to appeal,'' but a stochastic post-decision transformation
+whose transition probabilities depend on group, latent label, initial outcome,
+and policy.
+
+We study a binary, one-shot model in which an individual with an adverse
+initial decision may appeal and review may reverse that decision.  Let
+$\alpha_g^+$ be the probability that a false denial in group $g$ is appealed
+and $\rho_g^+$ its conditional correction probability; let $\alpha_g^-$ and
+$\rho_g^-$ analogously describe an appealed correct denial that is incorrectly
+reversed.  The effective transition rates are
+$\kappa_g^+=\alpha_g^+\rho_g^+$ and
+$\kappa_g^-=\alpha_g^-\rho_g^-$.  This factorization separates access from
+review quality while making clear that final fairness depends on their product.
+
+Our contributions are deliberately narrow: (i) exact fairness transformation
+and preservation characterization for a post-decision contestation operator;
+(ii) signed disparity dynamics, including creation, amplification,
+attenuation, crossing, and reversal; (iii) group-fairness consequences of
+endogenous participation under heterogeneous costs and formally symmetric
+policies; (iv) appeal-log-specific non-identification and sharp final-FNR and
+disparity bounds; and (v) resource-constrained assistance within the same
+mechanism.  We do not claim generic novelty for contestability, procedural
+fairness, recourse burdens or costs, selective labels, partial identification,
+random auditing, convex optimization, or knapsack structure.
+
+The empirical evidence is intentionally qualified.  Synthetic experiments
+verify the formal results.  Semisynthetic experiments use real prediction
+tasks but simulated contestation, not observed human appeals.  Adult robustly
+shows the proposed mechanism; the smaller German Credit data support the
+directional theory for two models but not a model-robust absolute-gap claim.
+
+\section{Related work and positioning}
+
+Contestability and correctability research motivates rights, evidence, and
+infrastructure for challenging automated decisions
+\citep{kaminski2021,cobbe2021,lyons2021,lyons2022,freiesleben2026}.  Perdana's
+``correctability gap'' is a useful motivation: conventional fairness metrics
+do not show whether affected people can appeal, submit evidence, or obtain
+human review \citep{perdana2026legitimacy}.  We formalize one such correction
+channel rather than treating correctability itself as new.
+
+Procedural fairness studies the fairness of the decision-making process.
+Wang et al. formalize individual and group procedural fairness using
+feature-attribution characterizations of the model process
+\citep{wang2026procedural}.  Our object begins after the model has issued
+$D_0$: self-selected access to human review and the resulting $D_1$.
+Relatedly, human discretion can change fairness in machine-assisted decisions
+\citep{gillis2022,angelova2023}; here review is claimant-initiated rather than
+discretion applied across all cases.
+
+Differential parity compares two sets of decisions and asks whether their
+difference is independent of a sensitive attribute, including human and model
+comparisons and bridge estimation across different data
+\citep{yu2026differential}.  We do not propose another relative-fairness
+metric.  We specify the transition $D_0\to$ appeal $\to$ human review
+$\to D_1$, make participation endogenous, and derive its transformation of
+standard fairness quantities, identification properties, and interventions.
+
+Recourse work shows that feasible actions, costs, and effectiveness vary
+across groups \citep{vonkugelgen2020,kavouras2023}.  Nitchals separately
+analyzes heterogeneous private appeal costs, procedural pricing, correction,
+resource use, deterrence, and an interior optimal price
+\citep{nitchals2026pricing}.  We make no novelty claim for heterogeneous costs
+or resource-aware procedure design.  Our focus is protected-group fairness,
+preservation of standard criteria, effective group-specific correction,
+appeal-log identification, and fairness-aware assistance.
+
+Selective-label research studies learning and fairness when outcomes are
+observed only for selected cases
+\citep{dearteaga2018,kilbertus2020,wei2021,coston2021,chen2025}.  Valdrighi et
+al. address long-term fairness with selectively observed labels and sequential
+policies \citep{valdrighi2026longterm}; Liu et al. study identification and
+inference for fairness--accuracy frontiers \citep{liu2026frontiers}.  We do not
+claim generic partial-identification novelty.  Our missingness comes from
+self-selection into a post-decision correction channel, and we derive
+appeal-specific sharp bounds for final FNR and associated group disparity.
+
+Thus existing work separately studies contestability, procedural fairness,
+relative decision-set fairness, human discretion, recourse burdens, appeal
+economics, and selective-label identification.  We instead fix a specific
+mechanism---an adverse AI decision may enter a self-selected human correction
+channel---and ask how it transforms standard group-fairness properties and
+what ordinary appeal records identify.
+
+\section{Model}
+
+Let $G\in\mathcal G$ denote group membership, $Y\in\{0,1\}$ the target label,
+$D_0\in\{0,1\}$ the initial decision, and $D_1\in\{0,1\}$ the final decision.
+Decision 0 is adverse.  Write
+\[
+ t_g=\Prb(D_0=1\mid Y=1,G=g),\qquad
+ f_g=\Prb(D_0=1\mid Y=0,G=g),
+\]
+with $\mathrm{FNR}_g=1-t_g$ and $\mathrm{TNR}_g=1-f_g$.
+Let $A$ indicate appeal and $R$ indicate reversal after review.  In the core
+one-sided model, only $D_0=0$ cases can transition to $D_1=1$.  Define
+\[
+ \alpha_g^y=\Prb(A=1\mid D_0=0,Y=y,G=g),\quad
+ \rho_g^y=\Prb(R=1\mid A=1,D_0=0,Y=y,G=g),
+\]
+and $\kappa_g^y=\alpha_g^y\rho_g^y$.  The superscripts $+$ and $-$ refer to
+$y=1$ and $y=0$, respectively.
+
+This model assumes fixed groups and outcomes, stable review behavior within a
+policy environment, and a one-shot appeal.  It does not require people to know
+whether the initial decision is erroneous.  A general Markov kernel can allow
+both directions of revision, but the one-sided form yields transparent
+fairness identities.
+
+\section{Contestation transforms fairness}
+
+\begin{proposition}[One-sided transformation]
+For every group $g$,
+\begin{align}
+ \mathrm{TPR}'_g &= t_g+(1-t_g)\kappa_g^+, &
+ \mathrm{FNR}'_g &= (1-t_g)(1-\kappa_g^+),\\
+ \mathrm{FPR}'_g &= f_g+(1-f_g)\kappa_g^-, &
+ \mathrm{TNR}'_g &= (1-f_g)(1-\kappa_g^-).
+\end{align}
+\end{proposition}
+
+The proof partitions each label stratum by its initial decision and applies
+the relevant transition probability.  More generally, if $p_g$ is a row
+vector over decisions and $K_g^y$ is a label-specific stochastic kernel, then
+$p'_g=p_gK_g^y$.  The closed forms above are its adverse-to-favorable
+specialization.
+
+For two groups $a,b$, define the signed equal-opportunity gap
+$\Delta_{EO}=t_a-t_b$.  The exact post-contestation gap is
+\begin{equation}
+ \Delta'_{EO}=\Delta_{EO}+(1-t_a)\kappa_a^+-(1-t_b)\kappa_b^+.
+ \label{eq:signedgap}
+\end{equation}
+Thus equal opportunity is preserved if and only if the two correction
+increments are equal.  When $t_a=t_b=t$, contestation creates the gap
+$(1-t)(\kappa_a^+-\kappa_b^+)$.  When a gap already exists, however, the
+increment can reinforce, attenuate, cross, or reverse it.  Equation
+\eqref{eq:signedgap}, not monotone absolute amplification, is the general
+prediction.
+
+The false-positive signed gap has the parallel form
+\[
+ \Delta'_{FPR}=f_a-f_b+(1-f_a)\kappa_a^--(1-f_b)\kappa_b^-.
+\]
+Equalized odds requires both increment equalities.  Demographic parity is
+different.  If $\pi_g=\Prb(Y=1\mid G=g)$, its within-group positive-rate
+increment is
+\begin{equation}
+ \pi_g\mathrm{FNR}_g\kappa_g^+
+ +(1-\pi_g)\mathrm{TNR}_g\kappa_g^-.
+\end{equation}
+Equal transition rates therefore need not preserve demographic parity because
+groups may contain different masses and compositions of appealable cases;
+unequal transitions can also offset those differences.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.68\linewidth]{figures/FIG-01_contestability_gap.png}
+\caption{Synthetic verification of the relationship between effective
+contestability differences and the post-contestation equal-opportunity gap.}
+\Description{A line plot showing the post-contestation equal-opportunity gap
+increasing with differences in effective contestability.}
+\label{fig:gap}
+\end{figure}
+
+\section{Formal symmetry and endogenous access}
+
+Suppose an eligible individual appeals when perceived benefit $v$ exceeds net
+cost $C_g-s_g$, where $s_g$ is assistance.  If $C_g$ has conditional CDF
+$F_g$, then
+\begin{equation}
+ \alpha_g(s_g)=F_g(v+s_g).
+ \label{eq:access}
+\end{equation}
+The same posted procedure or subsidy does not imply the same appeal
+probability when cost distributions differ.  With common review success
+$\rho$, effective correction is $\rho F_g(v+s_g)$.
+
+If $F_a(x)>F_b(x)$ throughout the policy-relevant support and assistance must
+be group blind, $s_a=s_b$, then equal effective access is unattainable in the
+interior unless a boundary saturates both groups or another component of the
+mechanism offsets the ordering.  This is a conditional impossibility result,
+not a claim that equality is impossible under all policy designs.  Group-
+specific assistance, changes to documentation requirements, review-quality
+interventions, or saturation provide escape routes.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.74\linewidth]{figures/FIG-02_equal_policy_heterogeneous_costs.png}
+\caption{A formally equal assistance policy can produce unequal effective
+access when groups face different appeal-cost distributions.}
+\Description{Two appeal-access curves under the same assistance level; the
+curves differ because the groups have different cost distributions.}
+\label{fig:costs}
+\end{figure}
+
+\section{Allocating limited assistance}
+
+Let $x_g\ge0$ be assistance to group $g$, $n_g$ its eligible population, and
+$B$ a budget.  A planner may minimize aggregate final error plus a fairness
+penalty,
+\begin{equation}
+ \min_x\quad L(x)+\lambda\Phi(x)
+ \quad\text{s.t.}\quad \sum_g n_gx_g\le B,
+ \label{eq:allocation}
+\end{equation}
+where appeal access follows Equation~\eqref{eq:access}.  For differentiable,
+convex separable-welfare instances satisfying Slater's condition, with a
+binding budget and an interior allocation, the KKT conditions equate weighted
+marginal harm reduction per unit resource among assisted groups, adjusted by
+the shadow price of budget.  A fairness-aware optimum can
+therefore prioritize a group whose marginal disparity reduction is large even
+when a purely accuracy-maximizing rule would not.
+
+For indivisible interventions, the problem contains 0--1 knapsack as a
+special case; this classical reduction motivates exact dynamic programming or
+approximation rather than a claim of new complexity theory.  Our experiments
+compare the fairness-aware rule with uniform, random, and proportional
+baselines and expose the parameter $\lambda$ rather than silently fixing a
+normative objective.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.70\linewidth]{figures/FIG-03_fairness_utility_frontier.png}
+\caption{The experimental fairness--utility frontier under limited
+assistance.  The curve makes the normative trade-off explicit.}
+\Description{A frontier plotting equal-opportunity disparity against aggregate
+loss as the assistance allocation changes.}
+\label{fig:frontier}
+\end{figure}
+
+\section{What appeal logs identify}
+
+An ordinary log observes $G,D_0,A$ and the review outcome for appellants, but
+typically not a valid $Y$ for non-appellants.  Let $m_g$ be the adverse-decision
+mass, $q_g=\Prb(A=1\mid D_0=0,G=g)$, and let $r_g$ be the observed positive-
+label share among appellants.  The latent positive share among non-appellants,
+$u_g$, can vary over $[0,1]$ without changing the appeal-log distribution.
+Hence the positive mass among adverse cases lies sharply in
+\begin{equation}
+ m_g\{q_gr_g+(1-q_g)u_g\},\qquad u_g\in[0,1].
+\end{equation}
+Combining this interval with the observed positive mass among initially
+favorable cases yields sharp bounds on the group FNR.  Distinct worlds can
+therefore have identical appeal logs but materially different oracle error
+rates and fairness conclusions.
+
+Representative random audits of adverse non-appellants identify $u_g$ under
+valid labels and known inclusion probabilities.  Inverse-probability
+estimation is then consistent, and uncertainty contracts with the effective
+audit sample size.  Random auditing is a supporting design result familiar
+from missing-data and selective-label settings; its importance here is that
+it closes the precise gap left by self-selected appeal logs.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.48\linewidth]{figures/FIG-04_observational_equivalence.png}
+\hfill
+\includegraphics[width=.48\linewidth]{figures/FIG-05_audit_rate_interval_width.png}
+\caption{Left: observationally equivalent appeal logs can conceal different
+oracle FNRs. Right: representative auditing contracts the identified interval.}
+\Description{The left panel compares latent worlds with identical observed
+appeal logs but different false-negative rates. The right panel shows interval
+width declining as the representative audit rate increases.}
+\label{fig:id}
+\end{figure}
+
+\section{Experiments}
+
+\subsection{Design}
+
+The evaluation has six predeclared gates.  Unit and smoke tests precede the
+scientific runs.  Synthetic experiments then test algebraic agreement,
+interior-grid directional predictions, assistance allocation, observational
+equivalence, sharp bounds, and audit-width contraction.  The final gate uses
+Adult \citep{becker1996adult} and German Credit
+\citep{hofmann1994german} as real classification tasks with a semisynthetic
+post-decision mechanism.  Both are public UCI datasets distributed under
+CC~BY~4.0.
+
+For each real dataset we fit logistic regression, gradient boosting, and
+random forest models.  Train, validation, and test partitions are separated;
+group thresholds are calibrated on validation data and frozen before test
+evaluation.  Five contestation regimes are fixed in advance: equal access and
+moderate or strong advantage for either group.  Twenty paired seeds
+(1729--1748) yield
+$2\times3\times5\times20=600$ real-data runs.  We report two-sided 95\%
+Student-$t$ intervals for paired seed-level pre/post changes.  These data do
+not contain observed appeals, costs, or review behavior; only the prediction
+task is empirical.
+
+The complete pipeline contains 820 standardized seed-level CSV files: 220
+synthetic/theorem files and 600 real-data files.  All commands returned zero,
+and validation completed without errors or warnings.  The downloaded Kaggle
+artifact is retained with a SHA-256 digest and an immutable extracted copy.
+
+\subsection{Dataset and protocol data card}
+
+Both prediction datasets are from the UCI Machine Learning Repository and are
+distributed under CC~BY~4.0.  Adult combines the 32,561 training and 16,281
+test records supplied by UCI; all 48,842 records remain after deterministic
+schema conversion.  The target is income $>\$50{,}000$ (favorable $=1$;
+$\le\$50{,}000$ unfavorable $=0$), and the protected attribute is sex coded
+exactly as \texttt{Female}/\texttt{Male}.  German Credit contains 1,000 raw
+and 1,000 prepared records.  UCI credit-risk label 1 (good) maps to favorable
+1 and label 2 (bad) to 0.  Personal-status/sex codes A92 and A95 map to
+\texttt{Female}; A91, A93, and A94 map to \texttt{Male}.  In both datasets the
+group column is removed from classifier inputs.  German's source
+personal-status/sex field is also removed.
+
+Adult question marks are parsed as missing; German conversion introduces no
+missing-value rule.  In the modeling pipeline, numeric missing values are
+median-imputed and standardized; categorical missing values are
+most-frequent-imputed and one-hot encoded with unknown levels ignored.  For
+each seed, joint label--group stratification creates 60/20/20 percent
+train/validation/test partitions: test uses seed $s$ and validation uses
+$s+1$.  Logistic regression, histogram gradient boosting, and random forest
+are fit on training data.  On validation data, each group's threshold is
+selected from $\{0.01,\ldots,0.99\}$ to match the overall positive-class TPR
+at threshold 0.5 as closely as possible; thresholds are then frozen on test.
+
+The paired seed range is 1729--1748.  The five preregistered regimes set the
+Female/Male values of $\alpha^+$ as follows: equal $(.50,.50)$; moderate
+female $(.65,.35)$; strong female $(.75,.25)$; moderate male $(.35,.65)$; and
+strong male $(.25,.75)$.  Every regime uses Female/Male values
+$\alpha^-=(.25,.25)$, $\rho^+=(.80,.80)$, and $\rho^-=(.05,.05)$.  Dataset
+features, targets, and initial predictions are empirical; appeal, review, and
+final-decision variables are semisynthetic.
+
+\subsection{Synthetic results}
+
+The synthetic gates pass.  Across the EXP-01 grid, theoretical signed gaps
+span $-0.24$ to $0.24$ and empirical means have absolute error between
+$0.000441$ and $0.001621$.  EXP-02 covers signed gaps from $-0.15$ to $0.15$
+with mean absolute error from $0.000640$ to $0.001522$.  The heterogeneous-
+cost experiment has mean absolute errors from $0.000379$ to $0.001324$.
+
+At interior budgets, the fairness-aware allocation produces a nontrivial
+trade-off between the absolute equal-opportunity gap and aggregate loss.  It
+substantially reduces the absolute gap relative to uniform, random, and
+proportional baselines.  In the
+identification suite, four pairs of observationally equivalent worlds have
+oracle FNR differences from $1/3$ to $2/3$.  Aggregate interval width falls
+from $0.1496$ at audit rate $0.001$ to $0.0102$ at rate $0.20$, with reported
+coverage 1.0 on the evaluated grid.
+
+\subsection{Semisynthetic real-data results}
+
+Table~\ref{tab:e6} gives the predeclared E6 decision.  On Adult, average
+pre-contestation absolute equal-opportunity gaps range from 0.031 to 0.039.  Every one
+of the 12 unequal-access model--scenario cells increases the absolute gap,
+with all paired 95\% intervals excluding zero.  Mean increases range from
+0.0442 to 0.1513.  All 12 signed shifts point toward the group with greater
+false-denial access and exclude zero.
+
+German Credit behaves differently.  Average initial gaps are 0.0275 for
+random forest, 0.0742 for gradient boosting, and 0.0945 for logistic
+regression.  The expected signed movement is resolved in 7 of 12 unequal-
+access cells: 4/4 logistic, 3/4 gradient boosting, and 0/4 random forest.
+Signed mean changes range from $-0.0700$ to $+0.0443$.  No German cell has a
+paired interval supporting an increase in the absolute gap.  The signed
+disparity often attenuates, crosses zero, or reverses, consistent with
+Equation~\eqref{eq:signedgap}, while small test strata produce noisier
+calibration and inference.
+
+Overall accuracy improves with a positive paired interval in all 30 dataset--
+model--scenario cells.  The German null is therefore not a failed execution:
+review remains mostly corrective, but its fairness effect is neither broad
+nor model robust.  We classify E6 as a \emph{partial pass}.
+
+\begin{table}[t]
+\centering
+\caption{Summary of unequal-access E6 cells. ``Signed resolved'' means the
+paired 95\% interval excludes zero in the direction specified by the access
+advantage.}
+\label{tab:e6}
+\begin{tabular}{lrrrr}
+\toprule
+Dataset & Cells & Signed resolved & Absolute increase & Accuracy increase\\
+\midrule
+Adult & 12 & 12 & 12 & 12\\
+German Credit & 12 & 7 & 0 & 12\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.98\linewidth]{figures/FIG-05_signed_eo_change.pdf}
+\caption{Paired change in the signed equal-opportunity disparity
+$\Delta_{\mathrm{post}}-\Delta_{\mathrm{pre}}$ under the four unequal-access
+regimes; bars are two-sided 95\% paired Student-$t$ intervals across 20 seeds.
+The sign is Female minus Male, so female-advantage regimes move upward and
+male-advantage regimes downward.  Adult resolves all 12 predicted directions;
+German Credit resolves 7 of 12, and none for random forest.  Absolute-gap
+changes are summarized in Table~\ref{tab:e6}: 12/12 positive on Adult and
+0/12 positive on German Credit.}
+\Description{Two-panel interval plot for Adult and German Credit. Each panel
+shows signed equal-opportunity-gap changes for three classifiers and four
+unequal-access regimes. Adult intervals consistently follow the access
+advantage; German intervals are wider and random-forest intervals cross zero.}
+\label{fig:real}
+\end{figure}
+
+\section{Discussion and limitations}
+
+The main conceptual implication is that classifier fairness and final-decision
+fairness are different estimands.  A system can become more accurate for every
+group yet distribute corrections unequally.  Audits should record initial and
+final decisions, appeal eligibility, attempted and completed appeals, review
+outcomes, processing time, assistance, and representative labels among
+non-appellants.  Reporting appeal success only among those who enter the
+process is insufficient.
+
+The theory does not rank fairness definitions or resolve normative trade-offs.
+It assumes binary labels and decisions, a one-shot channel, stable review
+behavior, and fixed groups.  It omits queues, deadlines, repeated appeals,
+retaliation, classifier retraining, strategic institutions, and causal effects
+of protected-group membership.  Reviewer accuracy can depend on case mix, so
+expanding access may change $\rho$ rather than merely $\alpha$.  Assistance
+may alter perceived benefit or evidentiary quality as well as cost.
+
+Labels may be delayed, disputed, or affected by the decision.  Random audits
+identify non-appellant outcomes only when selection is representative and
+audit labels are valid.  Group-level equality can conceal intersectional and
+within-group inequity.  The real-data component is semisynthetic and contains
+no institutional estimates of appeal behavior or costs.  German Credit, in
+particular, does not support a universal absolute-amplification claim.
+
+The supplied novelty audit also limits the claim.  Contestability,
+reviewability, procedural fairness, relative decision-set fairness, fair
+recourse, heterogeneous appeal costs, human discretion, selective labels,
+partial identification, random auditing, convex KKT conditions, and knapsack
+structure are established topics.  The contribution is the specified
+claimant-initiated correction mechanism and its exact fairness, identification,
+and intervention consequences; no priority claim is made.
+
+\section{Conclusion}
+
+Post-decision review is not automatically a fairness safeguard.  Within the
+specified claimant-initiated mechanism, exact transformation identities state
+when equal opportunity, false-positive parity, equalized odds, or demographic
+parity survive review.  The signed correction term can reinforce, attenuate,
+cross, or reverse an existing disparity.  Endogenous participation explains
+why formal symmetry can fail to produce effective symmetry; the same model
+supports constrained assistance analysis and appeal-log-specific sharp bounds.
+The evidence marks the empirical boundary honestly: consistent Adult effects,
+partial directional support on German Credit, and no universal absolute-gap
+amplification result.
+
+\section*{Reproducibility statement}
+
+The final audited Kaggle run is 352782151 (CPU; Internet disabled), executed
+2026-09-25 18:51:07--19:12:56 UTC.  Its downloaded archive has SHA-256
+\begin{center}
+\small\texttt{AE30CA19BF912DB8FEB1BE33E263C994}\\[-2pt]
+\texttt{F73ED3C2556E6EFF6D6EB69747BCBF1A}.
+\end{center}
+The analysis validates the exact factorial before computing paired intervals.
+Configuration, seeds, standardized outputs, figures, gate decisions, and an
+output-inventory regression test accompany the manuscript.
+
+Code, configurations, and reproducibility artifacts are available at
+\url{https://github.com/Ranjan-V/JAIR-Fairness-After-the-Decision}.
+The source code is released under the MIT License, and author-generated
+research artifacts are released under CC BY 4.0. Third-party datasets retain
+their original source terms and are not redistributed in the repository.
+
+A fresh clean-environment reproduction regenerated all 220 synthetic/theorem
+outputs.  All 220 matched the archived numerical content at absolute and
+relative tolerance $10^{-6}$; the maximum absolute numerical difference was
+$5.39\times10^{-8}$.  This is a scientific-content reproduction, not a claim
+of byte equality.  Cross-platform line endings, serialized parameter keys,
+and final optimizer digits differ across the audited Linux and Windows
+environments; these differences are documented in the reproduction audit.
+
+\appendix
+\input{technical_appendix}
+
+\printbibliography
+
+\input{reproducibility_checklist}
+
+\end{document}

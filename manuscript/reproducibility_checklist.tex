@@ -1,0 +1,109 @@
+\section{Reproducibility Checklist for JAIR}
+
+The answers below use the checklist distributed in the official JAIR author
+kit downloaded on 27 September 2026.
+
+\subsection*{All articles}
+
+\begin{enumerate}
+  \item All claims investigated in this work are clearly stated. \textbf{Yes.}
+  \item Clear explanations are given of how the work substantiates the claims.
+    \textbf{Yes.}
+  \item Limitations or technical assumptions are stated clearly and
+    explicitly. \textbf{Yes.}
+  \item Conceptual outlines or pseudocode descriptions of introduced AI
+    methods and important implementation details are provided.
+    \textbf{Yes.} The mathematical operators, optimization problems, data
+    protocol, and executable implementation details accompany the submission.
+  \item Motivation is provided for design choices, parameters, datasets, and
+    protocols beyond metrics. \textbf{Yes.}
+\end{enumerate}
+
+\subsection*{Articles containing theoretical contributions}
+
+Does this paper make theoretical contributions? \textbf{Yes.}
+
+\begin{enumerate}
+  \item All assumptions and restrictions are stated clearly and formally.
+    \textbf{Yes.}
+  \item All novel claims are stated formally. \textbf{Yes.}
+  \item Proofs of all non-trivial claims are provided in sufficient detail for
+    verification by readers with relevant expertise. \textbf{Yes.}
+  \item Complex formalism is motivated and explained clearly. \textbf{Yes.}
+  \item Mathematical notation enhances clarity and gratuitous formalism is
+    avoided. \textbf{Yes.}
+  \item Appropriate citations are given for non-trivial theoretical tools and
+    techniques. \textbf{Yes.}
+\end{enumerate}
+
+\subsection*{Articles reporting computational experiments}
+
+Does this paper include computational experiments? \textbf{Yes.}
+
+\begin{enumerate}
+  \item All required source code is included in an appendix or will be made
+    publicly available upon publication. \textbf{Yes.} The complete code is
+    publicly available at
+    \url{https://github.com/Ranjan-V/JAIR-Fairness-After-the-Decision}.
+  \item The source code has a license permitting reproducibility use.
+    \textbf{Yes.} Author-written source code is licensed under the MIT License.
+  \item The source code has a license permitting general research use.
+    \textbf{Yes.} Author-written source code is licensed under the MIT License.
+  \item Raw, unaggregated experimental data is included or will be publicly
+    available upon publication. \textbf{Yes.} All 820 standardized seed-level
+    experimental output files are included in the public repository. Raw
+    third-party UCI datasets are excluded and must be obtained from source.
+  \item The unaggregated data has a license permitting reproducibility use.
+    \textbf{Yes.} Author-generated experimental outputs are licensed under
+    CC~BY~4.0; third-party datasets retain their original UCI source terms.
+  \item The unaggregated data has a license permitting general research use.
+    \textbf{Yes,} under the same license distinction.
+  \item Random-number generation and seeds are described sufficiently for
+    replication. \textbf{Yes.}
+  \item The execution environment, hardware, operating system, and software
+    versions are described. \textbf{Partially.} The CPU-only Kaggle setting,
+    exact dependency constraints, and clean-environment versions are recorded;
+    the managed worker's CPU model and RAM were not exposed in the archive.
+  \item Evaluation metrics are explained and motivated. \textbf{Yes.}
+  \item The number of algorithm runs is reported. \textbf{Yes.}
+  \item Unsuccessful or unsatisfactory experiments have not been silently
+    omitted. \textbf{Yes.}
+  \item Results include variation, confidence, or other distributional
+    information beyond point summaries. \textbf{Yes.}
+  \item All algorithm and hyperparameter settings and their selection method
+    are reported. \textbf{Yes.}
+  \item The range and number of settings explored before the final experiments
+    and optimization effort are indicated. \textbf{Partially.} The
+    predeclared final factorial and thresholds are archived; this study did not
+    conduct a broad hyperparameter search.
+  \item Appropriate statistical hypothesis tests are used in the presence of
+    noise. \textbf{Yes.} Paired two-sided 95\% Student-$t$ intervals are used
+    for seed-level changes; conclusions are stated as interval resolutions,
+    not as universal population claims.
+\end{enumerate}
+
+\subsection*{Articles using datasets}
+
+Does this work rely on one or more datasets? \textbf{Yes.}
+
+\begin{enumerate}
+  \item Newly introduced datasets are included or will be public with a
+    research-use license. \textbf{Not applicable.} No new dataset is
+    introduced.
+  \item A newly introduced dataset has a reproducibility-use license.
+    \textbf{Not applicable.}
+  \item A newly introduced dataset has a general research-use license.
+    \textbf{Not applicable.}
+  \item Datasets from public sources have appropriate citations.
+    \textbf{Yes.}
+  \item Datasets from the literature are publicly available.
+    \textbf{Yes.}
+  \item New or non-public datasets are described in detail.
+    \textbf{Not applicable.}
+  \item Preprocessing and splitting methods are described in detail.
+    \textbf{Yes.} The manuscript data card records source and prepared counts,
+    label and group mappings, feature exclusion, missing-value handling,
+    encoding, scaling, splitting, threshold calibration, models, seeds, and
+    every semisynthetic contestation parameter; executable preprocessing is
+    supplied.
+\end{enumerate}

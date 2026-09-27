@@ -1,0 +1,449 @@
+\section{Technical Appendix: Proofs and Boundary Cases}
+\label{app:proofs}
+
+This appendix states the exact scope of every named mathematical result used
+by the paper.  Conditional probabilities are asserted only when their
+conditioning events have positive probability.  All one-sided results assume
+that only an adverse initial decision can change and that a non-appellant
+retains the initial decision.
+
+\subsection{Operators and confusion-rate transformations}
+
+\paragraph{Theorem 1 (linear operator preservation criterion).}
+Let $V$ be a finite-dimensional vector space of feasible signed
+perturbations, let $T_K:V\to V$ be the linear map induced by a fixed
+collection of stochastic kernels, and let $L:V\to W$ encode a homogeneous
+linear fairness constraint.  The following are equivalent:
+\begin{enumerate}
+  \item $Lv=0$ implies $LT_Kv=0$ for every $v\in V$;
+  \item $\ker L\subseteq\ker(LT_K)$;
+  \item there is a linear map $M:\operatorname{im}L\to W$ such that
+        $LT_K=ML$ on $V$.
+\end{enumerate}
+
+\begin{proof}
+The first two conditions are identical.  Under the second, define
+$M(Lv)=LT_Kv$.  If $Lv=Lw$, then $v-w\in\ker L$, so
+$LT_K(v-w)=0$ and the definition does not depend on the representative.
+It is linear by construction.  Conversely, $LT_K=ML$ immediately implies
+$LT_Kv=0$ whenever $Lv=0$.
+\end{proof}
+
+For probability models, $V$ must be the span of feasible signed differences.
+An assertion made only on a thin or boundary-only subset of probability
+vectors does not automatically extend to the full algebraic kernel.  Affine
+constraints must be homogenized with a constant coordinate.
+
+\paragraph{Proposition 1 (one-sided confusion-rate transformation).}
+For every group $g$ with defined label-conditional rates,
+\begin{align*}
+ \mathrm{TPR}'_g&=\mathrm{TPR}_g+\mathrm{FNR}_g\kappa_g^+,&
+ \mathrm{FNR}'_g&=\mathrm{FNR}_g(1-\kappa_g^+),\\
+ \mathrm{FPR}'_g&=\mathrm{FPR}_g+\mathrm{TNR}_g\kappa_g^-,&
+ \mathrm{TNR}'_g&=\mathrm{TNR}_g(1-\kappa_g^-).
+\end{align*}
+
+\begin{proof}
+Conditional on $Y=1,G=g$, a final positive is either an initial positive or
+an initial negative followed by appeal and reversal.  These events are
+disjoint, and the latter has probability
+$\mathrm{FNR}_g\alpha_g^+\rho_g^+=\mathrm{FNR}_g\kappa_g^+$.
+Complementation gives the FNR identity.  Repeating the argument in the
+$Y=0$ stratum gives FPR and TNR.
+\end{proof}
+
+\paragraph{Corollary 1 (positive-decision rate).}
+With $\pi_g=\Prb(Y=1\mid G=g)$ and
+$r_g=\Prb(D_0=1\mid G=g)$,
+\[
+r'_g=r_g+\pi_g\mathrm{FNR}_g\kappa_g^+
+ +(1-\pi_g)\mathrm{TNR}_g\kappa_g^-.
+\]
+
+\begin{proof}
+Condition on $Y$ and substitute Proposition 1.
+\end{proof}
+
+\paragraph{Proposition 2 (two-sided transformation).}
+If $q_g^y=\Prb(D_1=0\mid D_0=1,Y=y,G=g)$, then
+\[
+ \mathrm{TPR}'_g=t_g(1-q_g^1)+(1-t_g)\kappa_g^+,
+ \qquad
+ \mathrm{FPR}'_g=f_g(1-q_g^0)+(1-f_g)\kappa_g^-.
+\]
+
+\begin{proof}
+Partition on $D_0$ within each label stratum and apply the two rows of the
+transition kernel.
+\end{proof}
+
+\subsection{Fairness preservation and signed disparity}
+
+\paragraph{Theorem 2 (equal-opportunity preservation).}
+If $t_A=t_B=t$, then post-contestation equal opportunity holds if and only if
+$(1-t)(\kappa_A^+-\kappa_B^+)=0$.  When $t<1$, this is equivalent to
+$\kappa_A^+=\kappa_B^+$; when $t=1$, it is automatic.
+
+\begin{proof}
+Subtract the two TPR identities in Proposition 1.
+\end{proof}
+
+\paragraph{Theorem 3 (FPR-parity preservation).}
+If $f_A=f_B=f$, then post-contestation FPR parity holds if and only if
+$(1-f)(\kappa_A^--\kappa_B^-)=0$.
+
+\begin{proof}
+Subtract the two FPR identities in Proposition 1.
+\end{proof}
+
+\paragraph{Corollary 2 (equalized odds).}
+Under initial equalized odds, final equalized odds holds exactly when both
+conditions in Theorems 2 and 3 hold.
+
+\begin{proof}
+Equalized odds is the conjunction of equal TPR and equal FPR.
+\end{proof}
+
+\paragraph{Theorem 4 (demographic-parity preservation).}
+If $r_A=r_B$ initially, demographic parity is preserved exactly when
+\[
+\pi_A\mathrm{FNR}_A\kappa_A^+
+ +(1-\pi_A)\mathrm{TNR}_A\kappa_A^-
+=\pi_B\mathrm{FNR}_B\kappa_B^+
+ +(1-\pi_B)\mathrm{TNR}_B\kappa_B^-.
+\]
+
+\begin{proof}
+Subtract the two identities in Corollary 1 and use $r_A-r_B=0$.
+\end{proof}
+
+\paragraph{Proposition 3 (universal one-sided preservation).}
+At a fixed common initial TPR $t<1$, a pair of one-sided operators preserves
+equal opportunity for every admissible group distribution if and only if the
+two $Y=1$ adverse-to-positive transition probabilities agree.  The analogous
+claim holds for FPR at a common $f<1$.
+
+\begin{proof}
+Sufficiency follows from Theorem 2.  Necessity follows because the multiplier
+$1-t$ (or $1-f$) is strictly positive.
+\end{proof}
+
+\paragraph{Theorem 5 (exact signed-gap dynamics).}
+Let $d=t_A-t_B$ and
+$c=(1-t_A)\kappa_A^+-(1-t_B)\kappa_B^+$.  Then $d'=d+c$ and
+\begin{align*}
+|d'|>|d|&\iff c(2d+c)>0,\\
+|d'|<|d|&\iff c(2d+c)<0,\\
+|d'|=|d|&\iff c=0\ \text{or}\ c=-2d.
+\end{align*}
+Direction reverses exactly when $d(d+c)<0$, and final equality holds exactly
+when $c=-d$.
+
+\begin{proof}
+The identity $d'=d+c$ follows from Proposition 1.  Since absolute gaps are
+nonnegative,
+$|d+c|^2-|d|^2=c(2d+c)$ has the same sign as their difference.  The remaining
+claims follow directly from the signs of $d,d+c$ and from $d+c=0$.
+\end{proof}
+
+\paragraph{Theorem 6 (tight attainable bounds).}
+For unrestricted independent $\kappa_A^+,\kappa_B^+\in[0,1]$,
+\[
+d'\in[t_A-1,1-t_B].
+\]
+The minimum attainable absolute gap is zero when this interval contains zero
+and otherwise is the distance from the interval to zero; the maximum is the
+larger absolute endpoint.
+
+\begin{proof}
+Writing $a=1-t_A$ and $b=1-t_B$, the correction $a\kappa_A^+-b\kappa_B^+$
+ranges continuously over $[-b,a]$.  Adding $d$ gives the displayed interval.
+The absolute-value extrema follow from elementary interval geometry and are
+attained at a corner or a feasible root.
+\end{proof}
+
+\paragraph{Corollary 3 (initially fair case).}
+If $t_A=t_B=t$, then
+$|d'|=(1-t)|\kappa_A^+-\kappa_B^+|\le1-t$, and the bound is tight.
+
+\subsection{Endogenous access and the conditional impossibility}
+
+\paragraph{Proposition 4 (threshold appeal response).}
+If perceived value is deterministic at $v_g^y$ and the conditional cost CDF
+is $F_g^y$, then $\alpha_g^y(u)=F_g^y(v_g^y+u)$.  For random value $V$,
+\[
+\alpha_g^y(u)=
+\E\!\left[F_{C\mid V,g,y}(V+u\mid V,G=g,Y=y,D_0=0)\right].
+\]
+
+\begin{proof}
+The appeal event is $\{C\le V+u\}$.  Condition on the declared stratum and,
+in the random-value case, condition once more on $V$.
+\end{proof}
+
+\paragraph{Proposition 5.} \emph{Comparative statics.}
+The appeal response is nondecreasing and right-continuous in assistance.  If
+the conditional cost law has density $f_{C\mid V,g,y}$ and differentiation
+under the expectation is valid, then
+\[
+(\alpha_g^y)'(u)=
+\E[f_{C\mid V,g,y}(V+u\mid V,g,y)]\ge0.
+\]
+
+\begin{proof}
+The indicator of $C\le V+u$ is pointwise nondecreasing in $u$, and its
+expectation is a shifted CDF mixture.  Right-continuity follows from CDF
+right-continuity and bounded convergence.  Under the stated regularity,
+differentiation under the expectation yields the density formula.
+\end{proof}
+
+\paragraph{Theorem 7 (formal symmetry versus effective equality).}
+Under common assistance $u$, deterministic perceived value $v$, and common
+review success $\rho>0$,
+\[
+\kappa_A^+(u)-\kappa_B^+(u)
+=\rho\{F_A^+(v+u)-F_B^+(v+u)\}.
+\]
+Thus effective correction parity holds exactly when the two conditional CDFs
+agree at the operative threshold.
+
+\begin{proof}
+Apply Proposition 4 and multiply each appeal probability by the common
+review-success rate.
+\end{proof}
+
+\paragraph{Theorem 8 (group-blind policy impossibility).}
+Assume initial $t_A=t_B=t<1$, group-blind $u$ in a feasible set $U$, common
+$v$, common $\rho>0$, and
+$F_A^+(v+u)<F_B^+(v+u)$ for every $u\in U$.  No feasible group-blind policy
+preserves equal opportunity.
+
+\begin{proof}
+Theorem 7 gives $\kappa_A^+(u)<\kappa_B^+(u)$.  Theorem 2 then gives
+\[
+t'_A-t'_B=(1-t)\rho\{F_A^+(v+u)-F_B^+(v+u)\}<0.
+\]
+The strictness assumptions are essential: saturation, a crossing point,
+zero review success, a perfect initial classifier, unequal review quality, or
+group-specific assistance can each invalidate the conclusion.
+\end{proof}
+
+\subsection{Limited-resource allocation}
+
+Define $R_g(u_g)=\mathrm{FNR}_g[1-\rho_g^+\alpha_g^+(u_g)]$.
+
+\paragraph{Theorem 9 (existence).}
+On a nonempty compact product domain, if every $R_g$ and resource cost $c_g$
+is continuous and the budget set is nonempty, both the minimax residual-risk
+program and the stated welfare-plus-disparity program attain optima.
+
+\begin{proof}
+The budget sublevel set is closed in a compact domain, hence compact.  Finite
+maxima, sums, and absolute differences of continuous functions are continuous.
+Weierstrass' theorem gives attainment.
+\end{proof}
+
+\paragraph{Theorem 10 (convexity conditions).}
+If every appeal response is concave, each cost is convex, and the domain is
+convex, then every $R_g$ is convex and the minimax problem is convex in
+epigraph form.  The separable welfare objective is convex.  A disparity-
+penalized objective is convex only when its pairwise absolute residual-risk
+differences are convex (for example, under affine residual risks).
+
+\begin{proof}
+$R_g$ is a constant plus a nonpositive multiple of a concave response, hence
+convex.  Finite maxima preserve convexity, and convex cost sublevel sets are
+convex.  Weighted sums preserve convexity.  The final qualification is needed
+because an absolute difference of two general convex functions need not be
+convex.
+\end{proof}
+
+\paragraph{Theorem 11 (KKT marginal rule).}
+For the differentiable convex separable-welfare program under Slater's
+condition, there are nonnegative multipliers $\eta,\ell_g,h_g$ satisfying
+\[
+w_gR'_g(u_g)+\eta c'_g(u_g)-\ell_g+h_g=0
+\]
+and complementary slackness.  If the budget binds,
+$0<u_g<\bar u_g$, and $c'_g(u_g)>0$, then
+\[
+-\frac{w_gR'_g(u_g)}{c'_g(u_g)}=\eta.
+\]
+
+\begin{proof}
+Under convexity and Slater's condition, KKT conditions are necessary and
+sufficient.  Interior box constraints set $\ell_g=h_g=0$; division by the
+positive marginal resource cost gives the displayed equality.  Boundary
+groups obey inequalities rather than this equality.
+\end{proof}
+
+\paragraph{Proposition 6 (minimum budget for a target).}
+If each $R_g$ is continuous and strictly decreasing over its effective range
+and each $c_g$ is nondecreasing, define
+$u_g^{\min}(\epsilon)=\inf\{u:R_g(u)\le\epsilon\}$.  The common target is
+feasible exactly when every set is nonempty and
+$B\ge\sum_gc_g(u_g^{\min})$.
+
+\begin{proof}
+Continuity makes each nonempty target sublevel closed, so the infimum is
+attained.  Strict monotonicity makes every feasible component at least its
+minimum.  Nondecreasing costs make the sum a necessary budget; choosing the
+componentwise minima proves sufficiency.
+\end{proof}
+
+For $\mathrm{FNR}_g>0$ and $\rho_g>0$, the untruncated required appeal
+probability is
+$p_g^*=(1-\epsilon/\mathrm{FNR}_g)/\rho_g$.  If $p_g^*>1$, equivalently
+$\epsilon<\mathrm{FNR}_g(1-\rho_g)$, the target is infeasible even with
+universal appeal.  This boundary must not be hidden by clipping $p_g^*$.
+
+\paragraph{Theorem 12 (discrete allocation complexity).}
+With binary-encoded nonnegative integer intervention costs and benefits, the
+threshold decision version of welfare-maximizing indivisible assistance is
+weakly NP-complete, even for one group.
+
+\begin{proof}
+Map an arbitrary 0--1 knapsack instance identically to individuals with the
+same costs and encoded expected benefits, the same budget, and the same target
+benefit.  Feasible subsets and objective values coincide.  Membership in NP
+follows by checking a proposed subset.  The inherited hardness is weak, not
+strong.
+\end{proof}
+
+\subsection{Identification and statistical auditing}
+
+\paragraph{Theorem 13 (appeal-log non-identification).}
+Without restrictions on appeal selection, ordinary appeal logs do not identify
+the final FNR even with perfect review and observed appellant labels.
+
+\begin{proof}
+Let every case have $D_0=0$, fix
+$\Prb(A=1)=a\in(0,1)$ and
+$\Prb(Y=1\mid A=1)=p\in(0,1)$, and let perfect review set $D_1=Y$ for
+appellants.  Non-appellants keep $D_1=0$.  Vary
+$q=\Prb(Y=1\mid A=0)$ over $[0,1]$.  Since $Y$ is unobserved exactly in
+the non-appellant stratum, all values of $q$ yield the same observed law, but
+\[
+\mathrm{FNR}'(q)=\frac{(1-a)q}{ap+(1-a)q}
+\]
+is strictly increasing in $q$.
+\end{proof}
+
+\paragraph{Corollary 5 (fairness non-identification).}
+Applying Theorem 13 separately to two groups gives observationally equivalent
+joint laws with different signed and absolute equal-opportunity gaps.  With
+positive fixed appellant-positive mass, a unit gap is approached but not
+attained.
+
+\paragraph{Theorem 14 (sharp no-assumption FNR bounds).}
+Let
+$s=\Prb(D_0=1,Y=1\mid g)$,
+$m=\Prb(D_0=0,A=1,Y=1\mid g)$,
+$n=\Prb(D_0=0,A=0\mid g)$,
+let $\rho$ be the identified mean reversal probability among appealed
+positives, and let $z\in[0,n]$ be the latent positive mass among adverse
+non-appellants.  Then
+\[
+F(z)=\frac{m(1-\rho)+z}{s+m+z}.
+\]
+When $s+m>0$ and $s+\rho m>0$, its sharp identified set is
+\[
+\left[\frac{m(1-\rho)}{s+m},
+\frac{m(1-\rho)+n}{s+m+n}\right].
+\]
+If $s+m>0$ but $s+\rho m=0$, the set is $\{1\}$.  If
+$s=m=0<n$, the set over compatible laws with a nonempty positive stratum is
+also $\{1\}$; if $s=m=n=0$, the FNR is undefined under every compatible law.
+
+\begin{proof}
+Where defined,
+\[
+F'(z)=\frac{s+\rho m}{(s+m+z)^2}\ge0.
+\]
+Endpoint substitution gives the first interval.  The stated boundary cases
+follow by direct substitution.  Sharpness holds because every feasible $z$
+can be assigned inside the unobserved stratum without changing the observed
+law.
+\end{proof}
+
+\paragraph{Proposition 7 (propensity-restricted sharp bounds).}
+Assume $m>0$ and
+$0<\underline\alpha\le\alpha\le\overline\alpha\le1$, where
+$\alpha=m/(m+z)$.  Then
+\[
+z\in\left[
+m\frac{1-\overline\alpha}{\overline\alpha},
+m\frac{1-\underline\alpha}{\underline\alpha}
+\right]\cap[0,n].
+\]
+Substitution into $F(z)$ gives sharp restricted bounds.
+
+\begin{proof}
+Solve $\alpha=m/(m+z)$ for $z=m(1-\alpha)/\alpha$.  This map is decreasing
+on $(0,1]$, which reverses the two propensity endpoints.  Intersecting with
+the feasible mass interval is necessary and sufficient.  If the intersection
+is empty, the restriction is falsified by the observed masses.
+\end{proof}
+
+\paragraph{Theorem 15 (identification by representative audits).}
+If each adverse non-appellant is audited with positive probability independently
+of $Y$ conditional on the recorded stratum, and the audit reveals $Y$ without
+error, then the missing prevalence $q$ and hence $z=nq$, the final FNR, and
+post-contestation disparities are identified.
+
+\begin{proof}
+Conditional independence gives
+\[
+\Prb(Y=1\mid \text{audit}=1,D_0=0,A=0,G=g)
+=\Prb(Y=1\mid D_0=0,A=0,G=g)=q_g.
+\]
+All remaining terms in Theorem 14 are observed.
+\end{proof}
+
+\paragraph{Proposition 8 (finite-audit contraction).}
+For $M_g\ge1$ independently audited non-appellants and positive fraction
+$\widehat q_g$, Hoeffding's inequality gives, with probability at least
+$1-\delta$,
+\[
+|\widehat q_g-q_g|\le
+e_g=\sqrt{\frac{\log(2/\delta)}{2M_g}}.
+\]
+After clipping the prevalence interval to $[0,1]$ and propagating it through
+$F(n_gq)$, its width is at most
+\[
+\frac{2n_g(s_g+\rho_gm_g)}{(s_g+m_g)^2}e_g
+\]
+when $s_g+m_g>0$.
+
+\begin{proof}
+Hoeffding gives the prevalence event.  Theorem 14's map is monotone, so its
+image is a confidence interval.  Its derivative with respect to $q$ is
+$n_g(s_g+\rho_gm_g)/(s_g+m_g+n_gq)^2$, bounded above by the displayed
+coefficient without $2e_g$.  The mean-value theorem completes the bound.
+\end{proof}
+
+\paragraph{Proposition 9 (simultaneous group bounds).}
+For $K$ groups, setting
+\[
+e_g=\sqrt{\frac{\log(2K/\delta)}{2M_g}}
+\]
+gives simultaneous coverage at least $1-\delta$ for all group prevalences,
+FNR images, and interval-derived pairwise gaps.
+
+\begin{proof}
+Apply Hoeffding at error probability $\delta/K$ within each group and take a
+union bound.  Monotone image and interval arithmetic preserve the joint
+coverage event.
+\end{proof}
+
+\subsection{Audit disposition and code correspondence}
+
+The proof audit found no contradiction in the central signed-gap,
+preservation, endogenous-access, allocation, or non-identification results.
+It did require three substantive clarifications: Theorem 1 is now stated on a
+signed-perturbation space rather than inferred from an unspecified probability
+domain; Proposition 6 exposes infeasible targets instead of clipping the
+required appeal probability; and Theorem 14/Proposition 7 now handle zero-mass
+boundaries explicitly.  Regression tests cover the new identification
+boundaries.  The theorem-to-code correspondence remains diagnostic rather
+than a substitute for proof.
