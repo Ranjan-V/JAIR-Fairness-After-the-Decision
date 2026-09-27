@@ -13,8 +13,11 @@ Push status: **SUCCESS**
 
 Release tag: `v1.0.0`
 
-Release URL if created: Git tag published; GitHub release-page creation is
-pending because GitHub CLI is unavailable in the authenticated Git environment.
+Release URL if created:
+https://github.com/Ranjan-V/JAIR-Fairness-After-the-Decision/releases/tag/v1.0.0
+
+The release asset `JAIR_REPRODUCIBILITY_RELEASE_v1.0.0.zip` was uploaded and
+reported by GitHub as `uploaded`.
 
 MIT license: **YES**
 

@@ -68,8 +68,8 @@ Raw and prepared UCI datasets are excluded.
 
 ## 12. GitHub release
 
-The immutable Git tag `v1.0.0` and reproducibility ZIP are prepared. GitHub
-release-page creation remains a human action because GitHub CLI is unavailable.
+The immutable Git tag and release page `v1.0.0` exist. The clean
+`JAIR_REPRODUCIBILITY_RELEASE_v1.0.0.zip` is attached to the release.
 
 ## 13. Zenodo status
 
@@ -110,11 +110,9 @@ overlap, missing glyphs, broken figure, or unreadable table was found.
 
 1. Confirm originality, prior-publication, and concurrent-review status for
    JAIR portal Question 3.
-2. Create the GitHub release page for tag `v1.0.0` and attach the prepared
-   reproducibility ZIP if automated browser release creation does not succeed.
-3. Enable the repository in Zenodo, archive `v1.0.0`, obtain the real DOI, and
+2. Enable the repository in Zenodo, archive `v1.0.0`, obtain the real DOI, and
    add it to repository/manuscript metadata as appropriate.
-4. Review acknowledgments, funding, conflicts, and optional ORCIDs; obtain an
+3. Review acknowledgments, funding, conflicts, and optional ORCIDs; obtain an
    independent human proofread before portal upload.
 
 ## 20. Final readiness
