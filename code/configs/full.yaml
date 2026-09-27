@@ -1,0 +1,31 @@
+profile: full
+output_dir: outputs/full
+seeds: [1729, 1730, 1731, 1732, 1733, 1734, 1735, 1736, 1737, 1738, 1739, 1740, 1741, 1742, 1743, 1744, 1745, 1746, 1747, 1748]
+n_jobs: 2
+bootstrap_repetitions: 1000
+theorem:
+  sample_sizes: [1000, 10000, 100000, 1000000]
+experiments:
+  EXP-01: {n: 200000, grid: [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]}
+  EXP-02: {n: 200000, grid: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]}
+  EXP-03: {n: 200000, subsidies: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.25, 1.5, 1.75, 2.0]}
+  EXP-04: {budgets: [0.0, 0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0]}
+  EXP-05: {budgets: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.25, 1.5, 1.75, 2.0], lambdas: [0.0, 0.1, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]}
+  EXP-06: {a: 0.5, p: 0.5}
+  EXP-07: {}
+  EXP-08: {n_nonappellants: 100000, rates: [0.0, 0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2]}
+  EXP-09: {}
+  EXP-10: {}
+realdata:
+  datasets: []
+  models: [logistic, gradient_boosting, random_forest]
+  test_fraction: 0.2
+  validation_fraction: 0.2
+  calibrate_equal_opportunity: true
+  alpha_positive_sequence: [0.65, 0.35]
+  alpha_negative_sequence: [0.25, 0.25]
+  rho_positive_sequence: [0.8, 0.8]
+  rho_negative_sequence: [0.05, 0.05]
+stress:
+  chunk_size: 500000
+  sample_sizes: [1000000, 5000000]

@@ -1,0 +1,31 @@
+profile: smoke
+output_dir: outputs/smoke
+seeds: [1729, 1730]
+n_jobs: 1
+bootstrap_repetitions: 50
+theorem:
+  sample_sizes: [1000, 5000]
+experiments:
+  EXP-01: {n: 2000, grid: [0.2, 0.5, 0.8]}
+  EXP-02: {n: 2000, grid: [0.2, 0.5, 0.8]}
+  EXP-03: {n: 2000, subsidies: [0.0, 0.5, 1.0]}
+  EXP-04: {budgets: [0.0, 0.5, 1.0]}
+  EXP-05: {budgets: [0.0, 0.5, 1.0], lambdas: [0.0, 1.0]}
+  EXP-06: {a: 0.5, p: 0.5}
+  EXP-07: {}
+  EXP-08: {n_nonappellants: 2000, rates: [0.0, 0.01, 0.05, 0.2]}
+  EXP-09: {}
+  EXP-10: {}
+realdata:
+  datasets: []
+  models: [logistic]
+  test_fraction: 0.2
+  validation_fraction: 0.2
+  calibrate_equal_opportunity: true
+  alpha_positive_sequence: [0.65, 0.35]
+  alpha_negative_sequence: [0.25, 0.25]
+  rho_positive_sequence: [0.8, 0.8]
+  rho_negative_sequence: [0.05, 0.05]
+stress:
+  chunk_size: 250000
+  sample_sizes: [1000000]

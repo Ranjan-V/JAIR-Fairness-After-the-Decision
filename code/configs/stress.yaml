@@ -1,0 +1,31 @@
+profile: stress
+output_dir: outputs/stress
+seeds: [1729, 1730, 1731, 1732, 1733]
+n_jobs: 2
+bootstrap_repetitions: 200
+theorem:
+  sample_sizes: [100000, 1000000, 5000000]
+experiments:
+  EXP-01: {n: 5000000, grid: [0.0, 0.25, 0.5, 0.75, 1.0]}
+  EXP-02: {n: 5000000, grid: [0.0, 0.25, 0.5, 0.75, 1.0]}
+  EXP-03: {n: 5000000, subsidies: [0.0, 0.25, 0.5, 1.0, 2.0]}
+  EXP-04: {budgets: [0.0, 0.5, 1.0, 2.0, 4.0]}
+  EXP-05: {budgets: [0.0, 0.5, 1.0, 2.0], lambdas: [0.0, 0.5, 2.0, 8.0]}
+  EXP-06: {a: 0.05, p: 0.05}
+  EXP-07: {}
+  EXP-08: {n_nonappellants: 5000000, rates: [0.0, 0.0001, 0.001, 0.01, 0.1]}
+  EXP-09: {}
+  EXP-10: {}
+realdata:
+  datasets: []
+  models: [logistic, gradient_boosting, random_forest]
+  test_fraction: 0.2
+  validation_fraction: 0.2
+  calibrate_equal_opportunity: true
+  alpha_positive_sequence: [0.65, 0.35]
+  alpha_negative_sequence: [0.25, 0.25]
+  rho_positive_sequence: [0.8, 0.8]
+  rho_negative_sequence: [0.05, 0.05]
+stress:
+  chunk_size: 500000
+  sample_sizes: [1000000, 5000000]

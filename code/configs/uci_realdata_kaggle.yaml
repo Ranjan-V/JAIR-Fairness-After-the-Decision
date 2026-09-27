@@ -1,0 +1,25 @@
+profile: full
+output_dir: outputs/full
+seeds: [1729, 1730, 1731, 1732, 1733, 1734, 1735, 1736, 1737, 1738, 1739, 1740, 1741, 1742, 1743, 1744, 1745, 1746, 1747, 1748]
+n_jobs: 2
+bootstrap_repetitions: 1000
+realdata:
+  datasets:
+    - name: adult
+      path: /kaggle/working/JAIR/code/data/uci/prepared/adult.csv
+      group_column: sex
+      label_column: income
+    - name: german
+      path: /kaggle/working/JAIR/code/data/uci/prepared/german_credit.csv
+      group_column: sex
+      label_column: credit_risk
+  models: [logistic, gradient_boosting, random_forest]
+  test_fraction: 0.2
+  validation_fraction: 0.2
+  calibrate_equal_opportunity: true
+  contestation_scenarios:
+    - {name: equal_access, alpha_positive_sequence: [0.5, 0.5], alpha_negative_sequence: [0.25, 0.25], rho_positive_sequence: [0.8, 0.8], rho_negative_sequence: [0.05, 0.05]}
+    - {name: moderate_first_group, alpha_positive_sequence: [0.65, 0.35], alpha_negative_sequence: [0.25, 0.25], rho_positive_sequence: [0.8, 0.8], rho_negative_sequence: [0.05, 0.05]}
+    - {name: strong_first_group, alpha_positive_sequence: [0.75, 0.25], alpha_negative_sequence: [0.25, 0.25], rho_positive_sequence: [0.8, 0.8], rho_negative_sequence: [0.05, 0.05]}
+    - {name: moderate_second_group, alpha_positive_sequence: [0.35, 0.65], alpha_negative_sequence: [0.25, 0.25], rho_positive_sequence: [0.8, 0.8], rho_negative_sequence: [0.05, 0.05]}
+    - {name: strong_second_group, alpha_positive_sequence: [0.25, 0.75], alpha_negative_sequence: [0.25, 0.25], rho_positive_sequence: [0.8, 0.8], rho_negative_sequence: [0.05, 0.05]}

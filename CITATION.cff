@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software or its research artifacts, please cite the accompanying manuscript."
+type: article
+title: "Fairness After the Decision: Group Fairness Under Selective Human Contestation"
+authors:
+  - family-names: Veerabhadraswamy
+    given-names: Ranjan
+    email: ranjanvswamyjnv2005@gmail.com
+    affiliation: "School of Computer Science and Engineering, Vellore Institute of Technology, Andhra Pradesh, Amaravati, Andhra Pradesh 522241, India"
+  - family-names: Emerson
+    given-names: Ajith Jubilson
+    email: ajith.jubilson@vitap.ac.in
+    affiliation: "School of Computer Science and Engineering, Vellore Institute of Technology, Andhra Pradesh, Amaravati, Andhra Pradesh 522241, India"
+repository-code: "https://github.com/Ranjan-V/JAIR-Fairness-After-the-Decision"
+license: MIT
+

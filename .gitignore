@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# Operating systems and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Credentials and local environment
+.env
+.env.*
+!.env.example
+kaggle.json
+*.pem
+*.key
+
+# LaTeX build products
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bcf
+*.blg
+*.bbl
+*.run.xml
+
+# Local third-party data (obtain from the official UCI sources)
+code/data/uci/
+
+# Local and duplicate experiment trees; frozen public outputs are in results/
+code/outputs/
+artifacts/
+tmp/
+
+# Local-only configuration with machine-specific paths
+code/configs/uci_realdata_local.yaml
+
+# Working and historical submission packages
+output/
+submission/JAIR_ANONYMOUS_MANUSCRIPT/
+submission/JAIR_ANONYMOUS_SUPPLEMENT/
+submission/JAIR_FINAL_PRESUBMISSION/
+submission/JAIR_FINAL_SUBMISSION/
+
+# Older manuscript build tree; canonical public source is manuscript/
+paper/
+
