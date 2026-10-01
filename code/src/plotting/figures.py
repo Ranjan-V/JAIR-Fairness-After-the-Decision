@@ -20,7 +20,7 @@ def plot_gap_vs_access(frame: pd.DataFrame, output: str | Path) -> None:
     fig, ax = plt.subplots(figsize=(6, 4))
     subset = frame[frame["alpha_b"] == frame["alpha_b"].min()].sort_values("alpha_a")
     ax.plot(subset["alpha_a"] - subset["alpha_b"], subset["predicted_absolute_gap"], marker="o")
-    ax.set(xlabel="Appeal-propensity gap", ylabel="Post-contestation EO gap")
+    ax.set(xlabel="Appeal-propensity gap", ylabel="Absolute post-contestation EO gap")
     _save(fig, output)
 
 

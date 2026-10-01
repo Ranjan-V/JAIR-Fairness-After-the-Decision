@@ -62,7 +62,7 @@ def build_all_figures_and_tables(root: Path) -> list[Path]:
         exp01["contestability_gap"] = exp01["kappa_a"] - exp01["kappa_b"]
         view = exp01.groupby("contestability_gap", as_index=False)["mean"].mean().sort_values("contestability_gap")
         fig, ax = plt.subplots(figsize=(6, 4)); ax.plot(view["contestability_gap"], view["mean"], marker="o")
-        ax.set(xlabel="Effective contestability gap", ylabel="Post-contestation EO gap")
+        ax.set(xlabel="Effective contestability gap", ylabel="Absolute post-contestation EO gap")
         _save(fig, figures / "FIG-01_contestability_gap.png")
 
     exp03 = core[(core["experiment_id"] == "EXP-03") & core["metric"].isin(["post_fnr_a", "post_fnr_b"])].copy()

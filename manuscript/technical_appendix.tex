@@ -230,10 +230,11 @@ group-specific assistance can each invalidate the conclusion.
 
 \subsection{Limited-resource allocation}
 
-Define $R_g(u_g)=\mathrm{FNR}_g[1-\rho_g^+\alpha_g^+(u_g)]$.
+Define $\mathcal{R}_g(u_g)=
+\mathrm{FNR}_g[1-\rho_g^+\alpha_g^+(u_g)]$.
 
 \paragraph{Theorem 9 (existence).}
-On a nonempty compact product domain, if every $R_g$ and resource cost $c_g$
+On a nonempty compact product domain, if every $\mathcal{R}_g$ and resource cost $c_g$
 is continuous and the budget set is nonempty, both the minimax residual-risk
 program and the stated welfare-plus-disparity program attain optima.
 
@@ -245,13 +246,13 @@ Weierstrass' theorem gives attainment.
 
 \paragraph{Theorem 10 (convexity conditions).}
 If every appeal response is concave, each cost is convex, and the domain is
-convex, then every $R_g$ is convex and the minimax problem is convex in
+convex, then every $\mathcal{R}_g$ is convex and the minimax problem is convex in
 epigraph form.  The separable welfare objective is convex.  A disparity-
 penalized objective is convex only when its pairwise absolute residual-risk
 differences are convex (for example, under affine residual risks).
 
 \begin{proof}
-$R_g$ is a constant plus a nonpositive multiple of a concave response, hence
+$\mathcal{R}_g$ is a constant plus a nonpositive multiple of a concave response, hence
 convex.  Finite maxima preserve convexity, and convex cost sublevel sets are
 convex.  Weighted sums preserve convexity.  The final qualification is needed
 because an absolute difference of two general convex functions need not be
@@ -262,12 +263,12 @@ convex.
 For the differentiable convex separable-welfare program under Slater's
 condition, there are nonnegative multipliers $\eta,\ell_g,h_g$ satisfying
 \[
-w_gR'_g(u_g)+\eta c'_g(u_g)-\ell_g+h_g=0
+w_g\mathcal{R}'_g(u_g)+\eta c'_g(u_g)-\ell_g+h_g=0
 \]
 and complementary slackness.  If the budget binds,
 $0<u_g<\bar u_g$, and $c'_g(u_g)>0$, then
 \[
--\frac{w_gR'_g(u_g)}{c'_g(u_g)}=\eta.
+-\frac{w_g\mathcal{R}'_g(u_g)}{c'_g(u_g)}=\eta.
 \]
 
 \begin{proof}
@@ -278,9 +279,9 @@ groups obey inequalities rather than this equality.
 \end{proof}
 
 \paragraph{Proposition 6 (minimum budget for a target).}
-If each $R_g$ is continuous and strictly decreasing over its effective range
+If each $\mathcal{R}_g$ is continuous and strictly decreasing over its effective range
 and each $c_g$ is nondecreasing, define
-$u_g^{\min}(\epsilon)=\inf\{u:R_g(u)\le\epsilon\}$.  The common target is
+$u_g^{\min}(\epsilon)=\inf\{u:\mathcal{R}_g(u)\le\epsilon\}$.  The common target is
 feasible exactly when every set is nonempty and
 $B\ge\sum_gc_g(u_g^{\min})$.
 

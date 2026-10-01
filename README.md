@@ -46,12 +46,11 @@ acceptance or publication.
   scripts, and tests.
 - `math/` and `theory/`: theorem statements, proofs, assumptions, and scope.
 - `kaggle/`: the audited CPU-oriented Kaggle workflow.
-- `manuscript/`: JAIR source, bibliography, figures, checklist, and final PDF.
-- `results/`: the 820 frozen standardized seed-level outputs plus aggregate
-  tables and run records used for the manuscript.
+- `manuscript/`: JAIR LaTeX source, bibliography, required style files,
+  figures, and submission checklist.
+- `results/`: compact aggregate summaries, manuscript tables, and run
+  manifests derived from the validated experiments.
 - `figures/`: publication figures generated from the validated outputs.
-- `reproducibility/`: audits, experiment gates, checksums, and inventory notes.
-- `submission/`: JAIR portal drafts and human-action notes.
 
 ## Reproduction
 
@@ -91,12 +90,14 @@ gate is a **partial pass**.
 
 ## Reproducibility
 
-The frozen release contains 820 archived standardized seed-level files: 220
-synthetic/theorem outputs and 600 semisynthetic real-data outputs. A fresh
-clean-environment reproduction regenerated all 220 synthetic/theorem outputs;
-220 of 220 matched archived numerical content at absolute and relative
-tolerance `1e-6`. The maximum absolute numerical difference was `5.39e-08`.
-This is scientific-content agreement, not byte-identical reproduction.
+The validated study comprised 220 synthetic/theorem runs and 600
+semisynthetic real-data runs. A clean-environment reproduction regenerated all
+220 synthetic/theorem outputs; every output matched the archived numerical
+content at absolute and relative tolerance `1e-6`, with maximum absolute
+difference `5.39e-08`. To keep the public repository reviewable, seed-level
+run files and compiled submission packages are not version-controlled; the
+aggregate summaries, tables, manifests, source code, configurations, and
+manuscript sources needed to inspect or reproduce the work are retained.
 
 ## Data
 
