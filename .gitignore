@@ -37,7 +37,7 @@ kaggle.json
 # Local third-party data (obtain from the official UCI sources)
 code/data/uci/
 
-# Local experiment trees; compact validated summaries are in results/
+# Local experiment trees; validated seed-level and aggregate outputs are in results/
 code/outputs/
 artifacts/
 tmp/

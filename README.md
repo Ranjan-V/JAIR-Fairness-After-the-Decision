@@ -48,8 +48,8 @@ acceptance or publication.
 - `kaggle/`: the audited CPU-oriented Kaggle workflow.
 - `manuscript/`: JAIR LaTeX source, bibliography, required style files,
   figures, and submission checklist.
-- `results/`: compact aggregate summaries, manuscript tables, and run
-  manifests derived from the validated experiments.
+- `results/`: all 820 standardized seed-level outputs, compact aggregate
+  summaries, manuscript tables, and run manifests from the validated study.
 - `figures/`: publication figures generated from the validated outputs.
 
 ## Reproduction
@@ -94,10 +94,10 @@ The validated study comprised 220 synthetic/theorem runs and 600
 semisynthetic real-data runs. A clean-environment reproduction regenerated all
 220 synthetic/theorem outputs; every output matched the archived numerical
 content at absolute and relative tolerance `1e-6`, with maximum absolute
-difference `5.39e-08`. To keep the public repository reviewable, seed-level
-run files and compiled submission packages are not version-controlled; the
-aggregate summaries, tables, manifests, source code, configurations, and
-manuscript sources needed to inspect or reproduce the work are retained.
+difference `5.39e-08`. The repository retains all 820 standardized seed-level
+outputs alongside aggregate summaries, tables, manifests, source code,
+configurations, and manuscript sources. Compiled submission packages remain
+outside version control.
 
 ## Data
 
